@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from input.mnist import load_mnist
 from exercise.two_layer_net import TwoLayerNet
 
@@ -27,7 +28,8 @@ for i in range(iters_num):
     y_batch = y_train[batch_mask]
 
     # 勾配の更新
-    grad = network.numerical_gradient(x_batch, y_batch)
+#    grad = network.numerical_gradient(x_batch, y_batch)
+    grad = network.gradient(x_batch, y_batch)
 
     # パラメータの更新
     for key in ('W1', 'b1', 'W2', 'b2'):
@@ -39,7 +41,16 @@ for i in range(iters_num):
 
     if i % iter_per_epoch == 0:
         train_acc = network.accuracy(x_train, y_train)
-        test_acc = network.accuraxy(x_test, y_test)
+        test_acc = network.accuracy(x_test, y_test)
         train_acc_list.append(train_acc)
         test_acc_list.append(test_acc)
         print("train acc. test acc | " + str(train_acc) + ", " + str(test_acc))
+
+x = np.arrange(len(train_acc_list))
+plt.plot(x, train_acc_list, label='train acc')
+plt.plot(x, test_acc_list, label='test acc', linestyale='--')
+plt.xlabel("epochs")
+plt.ylabel("accuracy")
+plt.ylim(0, 1.0)
+plt.legend(loc='lower right')
+plt.show()
